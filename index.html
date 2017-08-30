@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=DzFQ5ryIjeiolG6BS355myYy1wO6Wk4W"></script>
+    <title></title>
+    <style>
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        #result {
+            width: 100%;
+            z-index: 2;
+            position: fixed;
+            bottom: 0;
+        }
+
+
+        .search input {
+            width: 90%;
+            height: 42px;
+            border: 2px solid #bbb;
+            outline: none;
+            position: absolute;
+            top: 10px;
+            left: 5%;
+            transition: .3s linear;
+            z-index: 3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="search">
+        <input type="text" />
+    </div>
+    <div id="map"></div>
+    <div id="result"></div>
+</body>
+
+</html>
+<script>
+    var map = new BMap.Map("map");
+    var point = new BMap.Point(116.331398, 39.897445); //默认定位 北京
+    map.centerAndZoom(point, 15);
+    map.enableScrollWheelZoom(); //启用滚轮放大缩小，默认禁用 
+	/*	var geolocation = new BMap.Geolocation();
+		geolocation.getCurrentPosition(function(r) {
+			if(this.getStatus() == BMAP_STATUS_SUCCESS) {
+				var mk = new BMap.Marker(r.point); //创建一个图像标注
+				map.addOverlay(mk); //添加覆盖物
+				map.panTo(r.point); //将地图中心点改为给定的点
+				alert('您的位置：' + r.point.lng + ',' + r.point.lat);
+			} else {
+				alert('failed' + this.getStatus());
+			}
+		}, {
+			enableHighAccuracy: true
+		})
+	*/
+    // 检索结果面板
+    var local = new BMap.LocalSearch(map, {
+        renderOptions: {
+            map: map,
+            panel: "result"
+        },
+        onSearchComplete: function (result) {
+            if (local.getStatus() == BMAP_STATUS_SUCCESS) {
+                var html = "";
+                //遍历结果第一页的点，自定义结果面板
+                for (var i = 0; i < result.getCurrentNumPois(); i++) {
+                    var poi = result.getPoi(i);
+                    //下面根据LocalResultPoi对象的值拼html代码，此处略
+                    title[i] = poi.title;
+                    if (poi.address) {
+                        address[i] = poi.address;
+                    }
+
+                    if (poi.phoneNumber) {
+                        telephone[i] = poi.phoneNumber;
+                    }
+
+                }
+            }
+        },
+    });
+    local.search("餐饮")
+    local.getResults();
+
+    map.enableContinuousZoom(); //启用地图惯性拖拽，默认禁用
+
+</script>
