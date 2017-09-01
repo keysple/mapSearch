@@ -41,42 +41,19 @@
 
 </html>
 <script>
-	var locationPoint = {};
 	var distance = [];
 	var map = new BMap.Map("map");
 	var point = new BMap.Point(116.331398, 39.897445); //默认定位 北京
 	map.centerAndZoom(point, 12);
 	map.enableScrollWheelZoom(); //启用滚轮放大缩小，默认禁用 
-	map.enableContinuousZoom(); //启用地图惯性拖拽，默认禁用
-	
-	/*	var geolocation = new BMap.Geolocation();
-		geolocation.getCurrentPosition(function(r) {
-			if(this.getStatus() == BMAP_STATUS_SUCCESS) {
-				map.panTo(new BMap.Point(r.point.lng, r.point.lat)); //将地图中心点改为给定的点
-				locationPoint.lng = r.point.lng;
-				locationPoint.lat = r.point.lat;
-				var pt = new BMap.Point(r.point.lng, r.point.lat)
-				var mk = new BMap.Marker(r.point); //创建一个图像标注
-				alert('您的位置：'+r.point.lng+','+r.point.lat+'定位精确程度'+r.accuracy);
-				map.addOverlay(mk); //添加覆盖物
-				searchOper();
-			} else {
-				alert('failed' + this.getStatus());
-			}
-		}, {
-			enableHighAccuracy: true
-		})*/
+	map.enableContinuousZoom(); //启用地图惯性拖拽，默认禁用	
 		
 	//通过H5的api获取GPS定位坐标
 	if(navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
-			locationPoint.lng = position.coords.longitude;
-			locationPoint.lat = position.coords.latitude;
-			alert('您的位置：' + position.coords.longitude + ',' + position.coords.latitude);
-			var GPSPoint = [new BMap.Point(locationPoint.lng, locationPoint.lat)];
+			var GPSPoint = [new BMap.Point(position.coords.longitude, position.coords.latitude)];
 			var convertor = new BMap.Convertor();
 			convertor.translate(GPSPoint, 1, 5, function(data) {
-				alert(JSON.stringify(data));
 				if(data.status === 0) {
 					var point = {
 						lng: data.points[0].lng,
