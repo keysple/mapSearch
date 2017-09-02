@@ -52,6 +52,7 @@
 	if(navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			var GPSPoint = [new BMap.Point(position.coords.longitude, position.coords.latitude)];
+			alert('当前位置：'+position.coords.longitude+','+position.coords.latitude);
 			var convertor = new BMap.Convertor();
 			convertor.translate(GPSPoint, 1, 5, function(data) {
 				if(data.status === 0) {
@@ -61,8 +62,13 @@
 					};
 					searchOper(point);
 				}
+				else{
+					alert('错误信息'+JSON.stringify(data))
+				}
 			});
-		});
+		},function(e){
+			alert('error Message: '+e.code+''+e.message);
+		})
 	} else {
 		alert('当前设备GPS定位错误！')
 	};
